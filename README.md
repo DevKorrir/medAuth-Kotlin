@@ -1,5 +1,26 @@
 # medAuth-Kotlin
 
+## 🛠️**Technology Stack**
+
+<div align="center">
+
+[![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-0095D5?logo=kotlin)](https://kotlinlang.org)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+
+</div>
+
+- **UI Framework**: Jetpack Compose with Material3 Design
+- **Architecture**: MVVM + Repository Pattern
+- **Dependency Injection**: Hilt for clean architecture
+- **Backend**: Firebase (Auth, Firestore, Storage, Functions)
+- **Networking**: Kotlin Coroutines + retrofit
+- **Media**: Coil for efficient image loading
+- **Security**: EncryptedSharedPreferences for sensitive data
+
+---
+*Expectation ....!!*
+```kotlin
 📁 dev.korryr.medauth/
 ├── 📁 data/
 │   ├── 📁 local/
@@ -169,3 +190,6 @@
     ├── 📁 drawable/
     ├── 📁 menu/
     └── 📁 navigation/
+
+```
+    ---
