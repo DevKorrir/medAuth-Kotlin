@@ -2,8 +2,11 @@ package dev.korryr.medauth.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(
@@ -31,13 +34,13 @@ sealed class BottomNavItem(
 
     object Scan : BottomNavItem(
         route = Screen.Scan.route,
-        icon = Icons.Default.Camera,
+        icon = Icons.Default.QrCodeScanner,
         label = "Scan"
     )
 
     object Verify : BottomNavItem(
         route = Screen.Verify.route,
-        icon = Icons.Default.Check,
+        icon = Icons.Default.VerifiedUser,
         label = "Verify"
     )
 
