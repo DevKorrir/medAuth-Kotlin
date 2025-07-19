@@ -1,4 +1,4 @@
-package dev.korryr.medauth.ui.theme
+package dev.korryr.medauth.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
