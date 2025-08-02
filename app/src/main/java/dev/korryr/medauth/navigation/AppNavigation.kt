@@ -15,6 +15,8 @@ import dev.korryr.medauth.presentation.features.verification.VerifyScreen
 
 @Composable
 fun AppNavigation(
+    isDarkTheme: Boolean,
+    onThemeToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
@@ -44,8 +46,8 @@ fun AppNavigation(
                 }
                 composable(Screen.Profile.route) {
                     ProfileScreen(
-                        isDarkTheme = true,
-                        onThemeToggle = {},
+                        isDarkTheme = isDarkTheme,
+                        onThemeToggle = onThemeToggle,
                         modifier = modifier
                     )
                 }
