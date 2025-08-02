@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.dagger.hilt.android")
+
+    id("com.google.devtools.ksp")
+
 }
 
 android {
@@ -63,4 +67,18 @@ dependencies {
     //extend icons
     implementation("androidx.compose.material:material-icons-core:1.7.8")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
+
+    //coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    // DataStore
+    implementation ("androidx.datastore:datastore-preferences:1.1.7")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.57")
+    ksp("com.google.dagger:hilt-compiler:2.57")
+
+    // Hilt Navigation Compose (recommended for Compose + Hilt)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
 }
