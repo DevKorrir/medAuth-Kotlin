@@ -15,6 +15,7 @@ import dev.korryr.medauth.navigation.AppNavigation
 import dev.korryr.medauth.presentation.ui.theme.MedAuthTheme
 
 class MainActivity : ComponentActivity() {
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
