@@ -10,20 +10,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.korryr.medauth.data.local.preferences.ThemePreferences
+import dev.korryr.medauth.data.local.preferences.ThemeState
 import dev.korryr.medauth.presentation.features.auth.proflile.components.AccountSection
 import dev.korryr.medauth.presentation.features.auth.proflile.components.ProfileHeader
 import dev.korryr.medauth.presentation.features.auth.proflile.components.SettingsSection
 import dev.korryr.medauth.presentation.features.auth.proflile.components.StatsCards
 import dev.korryr.medauth.presentation.features.auth.proflile.components.SupportSection
 import dev.korryr.medauth.presentation.features.auth.proflile.data.UserProfile
+import androidx.compose.runtime.rememberCoroutineScope
+
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
-    isDarkTheme: Boolean,
-    onThemeToggle: (Boolean) -> Unit,
+    themeState: ThemeState,
+    themePreferences: ThemePreferences,
     modifier: Modifier = Modifier
 ) {
     val userProfile = remember { UserProfile() }
+    val scope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = modifier
@@ -42,8 +48,22 @@ fun ProfileScreen(
 
         item {
             SettingsSection(
-                isDarkTheme = isDarkTheme,
-                onThemeToggle = onThemeToggle
+                themeState = themeState,
+                onThemeToggle = { isDark : Boolean ->
+                    scope.launch {
+                        themePreferences.saveThemePreference(isDark)
+                    }
+                },
+                onAutoThemeToggle = { isAuto ->
+                    scope.launch {
+                        themePreferences.saveAutoThemePreference(isAuto)
+                    }
+                },
+                onDynamicColorToggle = { isDynamic ->
+                    scope.launch {
+                        themePreferences.saveDynamicColorPreference(isDynamic)
+                    }
+                }
             )
         }
 

@@ -2,49 +2,95 @@ package dev.korryr.medauth.presentation.features.auth.proflile.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.PhoneAndroid
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import dev.korryr.medauth.data.local.preferences.ThemeState
 
 @Composable
 fun SettingsSection(
-    isDarkTheme: Boolean,
-    onThemeToggle: (Boolean) -> Unit
+    themeState: ThemeState,
+    onThemeToggle: (Boolean) -> Unit,
+    onAutoThemeToggle: (Boolean) -> Unit,
+    onDynamicColorToggle: (Boolean) -> Unit
 ) {
+
+    SettingSectionCard(
+        title = "Appearance",
+        icon = Icons.Default.Palette
+    ) {
+        SettingItem(
+            title = "Follow System Theme",
+            subtitle = if (themeState.isAutoTheme) "App theme follows system setting" else "Manual theme selection",
+            icon = Icons.Default.PhoneAndroid,
+            hasSwitch = true,
+            switchState = themeState.isAutoTheme,
+            onClick = { onAutoThemeToggle(!themeState.isAutoTheme) }
+        )
+
+        // Only show manual theme toggle when not following system
+        if (!themeState.isAutoTheme) {
+            SettingItem(
+                title = "Dark Mode",
+                subtitle = if (themeState.isDarkTheme) "Dark theme is enabled" else "Light theme is enabled",
+                icon = if (themeState.isDarkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
+                hasSwitch = true,
+                switchState = themeState.isDarkTheme,
+                onClick = { onThemeToggle(!themeState.isDarkTheme) }
+            )
+        }
+
+        SettingItem(
+            title = "Dynamic Colors",
+            subtitle = if (themeState.isDynamicColor) "Colors adapt to your wallpaper" else "Use app default colors",
+            icon = Icons.Default.ColorLens,
+            hasSwitch = true,
+            switchState = themeState.isDynamicColor,
+            onClick = { onDynamicColorToggle(!themeState.isDynamicColor) }
+        )
+    }
+
+
     SettingSectionCard(
         title = "Preferences",
         icon = Icons.Default.Settings
     ) {
         SettingItem(
-            title = "Dark Mode",
-            subtitle = "Switch between light and dark themes",
-            icon = if (isDarkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
-            hasSwitch = true,
-            switchState = isDarkTheme,
-            onClick = { onThemeToggle(!isDarkTheme) }
-        )
-        
-        SettingItem(
-            title = "Notifications",
-            subtitle = "Manage your notification preferences",
-            icon = Icons.Default.Notifications
-        )
-        
-        SettingItem(
-            title = "Language",
-            subtitle = "Choose your preferred language",
-            icon = Icons.Default.Language
-        )
-        
-        SettingItem(
-            title = "Auto-Scan",
-            subtitle = "Enable automatic medicine scanning",
-            icon = Icons.Default.CameraAlt,
+            title = "Push Notifications",
+            subtitle = "Get alerts for medicine verification results",
+            icon = Icons.Default.Notifications,
             hasSwitch = true,
             switchState = true
+        )
+
+        SettingItem(
+            title = "Language & Region",
+            subtitle = "English (Kenya)",
+            icon = Icons.Default.Language
+        )
+
+        SettingItem(
+            title = "Auto-Save Scans",
+            subtitle = "Automatically save all scan results",
+            icon = Icons.Default.Save,
+            hasSwitch = true,
+            switchState = true
+        )
+
+        SettingItem(
+            title = "Offline Mode",
+            subtitle = "Enable offline medicine verification",
+            icon = Icons.Default.CloudOff,
+            hasSwitch = true,
+            switchState = false
         )
     }
 }

@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import dev.korryr.medauth.data.local.preferences.ThemePreferences
+import dev.korryr.medauth.data.local.preferences.ThemeState
 import dev.korryr.medauth.presentation.features.auth.proflile.ProfileScreen
 import dev.korryr.medauth.presentation.features.history.HistoryScreen
 import dev.korryr.medauth.presentation.features.home.HomeScreen
@@ -15,8 +17,8 @@ import dev.korryr.medauth.presentation.features.verification.VerifyScreen
 
 @Composable
 fun AppNavigation(
-    isDarkTheme: Boolean,
-    onThemeToggle: (Boolean) -> Unit,
+    themeState: ThemeState,
+    themePreferences: ThemePreferences,
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
@@ -46,8 +48,8 @@ fun AppNavigation(
                 }
                 composable(Screen.Profile.route) {
                     ProfileScreen(
-                        isDarkTheme = isDarkTheme,
-                        onThemeToggle = onThemeToggle,
+                        themeState = themeState,
+                        themePreferences = themePreferences,
                         modifier = modifier
                     )
                 }

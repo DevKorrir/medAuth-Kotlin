@@ -15,6 +15,13 @@ import kotlinx.coroutines.flow.map
 //import javax.inject.Inject
 //import javax.inject.Singleton
 
+// Data class for theme state
+data class ThemeState(
+    val isDarkTheme: Boolean = false,
+    val isDynamicColor: Boolean = true,
+    val isAutoTheme: Boolean = true
+)
+
 // DataStore extension
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "medauth_preferences")
 
