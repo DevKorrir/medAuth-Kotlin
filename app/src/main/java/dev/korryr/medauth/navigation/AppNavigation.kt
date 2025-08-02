@@ -43,7 +43,11 @@ fun AppNavigation(
                     HistoryScreen()
                 }
                 composable(Screen.Profile.route) {
-                    ProfileScreen()
+                    ProfileScreen(
+                        isDarkTheme = true,
+                        onThemeToggle = {},
+                        modifier = modifier
+                    )
                 }
                 composable(Screen.Result.route) {
                     //ResultScreen()
