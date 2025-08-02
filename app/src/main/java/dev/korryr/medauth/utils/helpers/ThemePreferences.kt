@@ -1,7 +1,7 @@
 package dev.korryr.medauth.utils.helpers
 
 // Data persistence helper for theme preference
-object ThemePreferences {
+object TtthemePreferences {
     // You can implement SharedPreferences or DataStore here
     fun saveThemePreference(isDark: Boolean) {
         // Save to SharedPreferences or DataStore

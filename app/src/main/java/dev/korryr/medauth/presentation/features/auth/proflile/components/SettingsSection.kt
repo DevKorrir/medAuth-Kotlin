@@ -1,7 +1,8 @@
 package dev.korryr.medauth.presentation.features.auth.proflile.components
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.DarkMode
@@ -13,7 +14,9 @@ import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import dev.korryr.medauth.data.local.preferences.ThemeState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import dev.korryr.medauth.data.local.preferences.themePreference.data.state.ThemeState
 
 @Composable
 fun SettingsSection(
@@ -57,6 +60,8 @@ fun SettingsSection(
             onClick = { onDynamicColorToggle(!themeState.isDynamicColor) }
         )
     }
+
+    Spacer(modifier = Modifier.height(8.dp))
 
 
     SettingSectionCard(
