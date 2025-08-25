@@ -38,13 +38,19 @@ fun AppNavigation(
                 modifier = modifier.padding(padding)
             ) {
                 composable(Screen.Home.route) {
-                    HomeScreen()
+                    HomeScreen(
+                        appState = appState
+                    )
                 }
                 composable(Screen.Scan.route) {
-                    ScanScreen()
+                    ScanScreen(
+                        appState = appState
+                    )
                 }
                 composable(Screen.Verify.route) {
-                    VerifyScreen()
+                    VerifyScreen(
+                        appState = appState
+                    )
                 }
                 composable(Screen.History.route) {
                     HistoryScreen()
