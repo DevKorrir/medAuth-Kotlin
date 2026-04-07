@@ -1,9 +1,15 @@
 package dev.korryr.medauth.data.repository
 
-import dev.korryr.medauth.core.ui.components.ResultStatus
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
+
+enum class ResultStatus {
+    VERIFIED,
+    INVALID,
+    UNKNOWN,
+    SUSPICIOUS
+}
 
 data class VerificationResult(
     val status: ResultStatus,

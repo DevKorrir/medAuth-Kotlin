@@ -78,8 +78,8 @@ fun MainScreenContainer() {
             modifier = Modifier.padding(innerPadding)
         ) { key ->
             when (key) {
-                is ScanScreen -> NavEntry(key) { ScanScreenStub() }
-                is HistoryScreen -> NavEntry(key) { HistoryScreenStub() }
+                is ScanScreen -> NavEntry(key) { dev.korryr.medauth.presentation.features.scan.ScanScreen(onScanSuccess = {}) }
+                is HistoryScreen -> NavEntry(key) { dev.korryr.medauth.presentation.features.history.HistoryScreen(onScanClick = {}) }
                 is ProfileScreen -> NavEntry(key) { ProfileScreenStub() }
                 else -> NavEntry(key) { Text("Unknown Tab") }
             }

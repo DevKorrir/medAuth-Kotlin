@@ -43,6 +43,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.korryr.medauth.core.designsystem.theme.SuccessGreen
+import dev.korryr.medauth.core.ui.components.EmptyStateView
 import dev.korryr.medauth.core.ui.components.InfoCard
 import dev.korryr.medauth.core.ui.components.PrimaryButton
 import dev.korryr.medauth.core.ui.components.SecondaryButton
@@ -97,7 +98,10 @@ fun ReportScreen(
                     }
                 }
                 is ReportState.Error -> {
-                    // Similar to empty error state
+                    EmptyStateView(
+                        title = "Submission Failed",
+                        message = "We could not submit your report. Please try again."
+                    )
                 }
             }
         }

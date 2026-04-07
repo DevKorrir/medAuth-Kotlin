@@ -58,7 +58,7 @@ dev.korryr.medauth/
 
 ### Prerequisites
 *   Android Studio Ladybug (or newer)
-*   JDK 17
+*   JDK 21
 *   Android Device/Emulator running Android 8.0 (API level 24) or higher (Camera required for scanning features).
 
 ### Building the Project
