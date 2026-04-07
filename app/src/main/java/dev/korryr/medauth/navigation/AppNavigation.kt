@@ -1,76 +1,113 @@
 package dev.korryr.medauth.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import dev.korryr.medauth.data.local.preferences.AppState
-import dev.korryr.medauth.data.local.preferences.themePreference.ThemePreferences
-import dev.korryr.medauth.data.local.preferences.themePreference.data.state.ThemeState
-import dev.korryr.medauth.data.local.preferences.themePreference.viewModel.ThemeViewModel
-import dev.korryr.medauth.presentation.features.auth.proflile.ProfileScreen
-import dev.korryr.medauth.presentation.features.history.HistoryScreen
-import dev.korryr.medauth.presentation.features.home.HomeScreen
-import dev.korryr.medauth.presentation.features.scan.ScanScreen
-import dev.korryr.medauth.presentation.features.verification.VerifyScreen
+import androidx.navigation3.NavDisplay
+import androidx.navigation3.NavEntry
+import dev.korryr.medauth.presentation.features.auth.login.LoginScreen
+import dev.korryr.medauth.presentation.features.auth.onboarding.OnboardingScreen
+
+// Stubs for future features
+@Composable fun ScanScreenStub() { Text("Scan") }
+@Composable fun HistoryScreenStub() { Text("History") }
+@Composable fun ProfileScreenStub() { Text("Profile") }
 
 @Composable
 fun AppNavigation(
-    themeState: ThemeState,
-    themePreferences: ThemePreferences,
-    appState: AppState,
-    modifier: Modifier = Modifier,
-    navController: NavHostController
+    modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar(
-                navController = navController
-            )
-        },
-        content = { padding ->
-            NavHost(
-                navController = navController,
-                startDestination = Screen.Home.route,
-                modifier = modifier.padding(padding)
-            ) {
-                composable(Screen.Home.route) {
-                    HomeScreen(
-                        appState = appState
-                    )
-                }
-                composable(Screen.Scan.route) {
-                    ScanScreen(
-                        appState = appState
-                    )
-                }
-                composable(Screen.Verify.route) {
-                    VerifyScreen(
-                        appState = appState
-                    )
-                }
-                composable(Screen.History.route) {
-                    HistoryScreen()
-                }
-                composable(Screen.Profile.route) {
-                    ProfileScreen(
-                        themeState = themeState,
-                        themePreferences = themePreferences,
-                        appState = appState,
-                        modifier = modifier,
-                    )
-                }
-                composable(Screen.Result.route) {
-                    //ResultScreen()
-                }
+    // Navigation 3 uses a SnapshotStateList for the backStack instead of a NavController
+    val backStack = remember { mutableStateListOf<Any>(OnboardingScreen) }
 
-
+    NavDisplay(
+        backstack = backStack,
+        onBack = { backStack.removeLastOrNull() != null },
+        modifier = modifier
+    ) { key ->
+        when (key) {
+            is OnboardingScreen -> NavEntry(key) {
+                OnboardingScreen(
+                    onFinishOnboarding = {
+                        backStack.clear()
+                        backStack.add(LoginScreen)
+                    }
+                )
+            }
+            is LoginScreen -> NavEntry(key) {
+                LoginScreen(
+                    onLoginSuccess = {
+                        backStack.clear()
+                        backStack.add(MainGraph)
+                    },
+                    onUseBiometrics = {
+                        backStack.clear()
+                        backStack.add(MainGraph)
+                    }
+                )
+            }
+            is MainGraph -> NavEntry(key) {
+                MainScreenContainer()
+            }
+            else -> NavEntry(key) {
+                Text("Unknown Screen")
             }
         }
+    }
+}
 
-    )
+@Composable
+fun MainScreenContainer() {
+    val bottomBackStack = remember { mutableStateListOf<Any>(ScanScreen) }
+    
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(backStack = bottomBackStack)
+        }
+    ) { innerPadding ->
+        NavDisplay(
+            backstack = bottomBackStack,
+            onBack = { bottomBackStack.removeLastOrNull() != null },
+            modifier = Modifier.padding(innerPadding)
+        ) { key ->
+            when (key) {
+                is ScanScreen -> NavEntry(key) { ScanScreenStub() }
+                is HistoryScreen -> NavEntry(key) { HistoryScreenStub() }
+                is ProfileScreen -> NavEntry(key) { ProfileScreenStub() }
+                else -> NavEntry(key) { Text("Unknown Tab") }
+            }
+        }
+    }
+}
 
+@Composable
+fun BottomNavigationBar(backStack: MutableList<Any>) {
+    val currentRoute = backStack.lastOrNull()
+
+    NavigationBar {
+        bottomNavigationItems.forEach { item ->
+            // Match our object instance directly since we use Navigation 3 instances
+            val isSelected = currentRoute == item.route
+            
+            NavigationBarItem(
+                icon = { Icon(item.icon, contentDescription = item.title) },
+                label = { Text(item.title) },
+                selected = isSelected,
+                onClick = {
+                    if (!isSelected) {
+                        // Pop behavior for bottom tabs: usually we want a single instance or flat history
+                        backStack.clear()
+                        backStack.add(item.route)
+                    }
+                }
+            )
+        }
+    }
 }

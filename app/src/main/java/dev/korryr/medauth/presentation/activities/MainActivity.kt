@@ -21,7 +21,7 @@ import dev.korryr.medauth.data.local.preferences.themePreference.ThemePreference
 import dev.korryr.medauth.data.local.preferences.themePreference.data.state.ThemeState
 import dev.korryr.medauth.data.local.preferences.themePreference.viewModel.ThemeViewModel
 import dev.korryr.medauth.navigation.AppNavigation
-import dev.korryr.medauth.presentation.ui.theme.MedAuthTheme
+import dev.korryr.medauth.core.designsystem.theme.MedAuthTheme
 
 
 @AndroidEntryPoint
@@ -49,7 +49,6 @@ fun MedAuthApp(
     themeViewModel: ThemeViewModel = hiltViewModel()
 ){
     val context = LocalContext.current
-    val navController = rememberNavController()
 
     // Collect theme state reactively
     val systemDarkTheme = isSystemInDarkTheme()
@@ -64,21 +63,13 @@ fun MedAuthApp(
     val finalDarkTheme = if (isAutoTheme) systemDarkTheme else isDarkTheme
 
     // Show loading or main content
-        MedAuthTheme(
-            darkTheme = finalDarkTheme,
-            dynamicColor = isDynamicColor
-        ) {
-            AppNavigation(
-                themeState = ThemeState(
-                    isDarkTheme = isDarkTheme,
-                    isDynamicColor = isDynamicColor,
-                    isAutoTheme = isAutoTheme
-                ),
-                themePreferences = themePreferences,
-                appState = appState,
-                modifier = Modifier.fillMaxSize(),
-                navController = navController
-            )
-        }
+    MedAuthTheme(
+        darkTheme = finalDarkTheme,
+        dynamicColor = isDynamicColor
+    ) {
+        AppNavigation(
+            modifier = Modifier.fillMaxSize()
+        )
     }
+}
 

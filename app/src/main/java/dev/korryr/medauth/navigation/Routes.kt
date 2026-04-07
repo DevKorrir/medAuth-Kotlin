@@ -1,58 +1,47 @@
 package dev.korryr.medauth.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QrCodeScanner
-import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.serialization.Serializable
 
-sealed class Screen(
-    val route: String
-) {
-    object Home : Screen("home_screen")
-    object Scan : Screen("scan_screen")
-    object Verify : Screen("verify_screen")
-    object History : Screen("history_screen")
-    object Profile : Screen("profile_screen")
-    object Result : Screen("result_screen")
+// Auth Graph
+@Serializable data object AuthGraph
+@Serializable data object OnboardingScreen
+@Serializable data object LoginScreen
 
-}
+// Main Graph
+@Serializable data object MainGraph
+@Serializable data object ScanScreen
+@Serializable data object HistoryScreen
+@Serializable data object ProfileScreen
+@Serializable data object ReportScreen
 
-sealed class BottomNavItem(
-    val route: String,
+@Serializable
+data class ResultDetailsScreen(val scanId: String)
+
+data class BottomNavItem(
+    val title: String,
     val icon: ImageVector,
-    val label: String
-) {
-    object Home : BottomNavItem(
-        route = Screen.Home.route,
-        icon = Icons.Default.Home,
-        label = "Home"
-    )
+    val route: Any
+)
 
-    object Scan : BottomNavItem(
-        route = Screen.Scan.route,
-        icon = Icons.Default.QrCodeScanner,
-        label = "Scan"
-    )
-
-    object Verify : BottomNavItem(
-        route = Screen.Verify.route,
-        icon = Icons.Default.VerifiedUser,
-        label = "Verify"
-    )
-
-    object History : BottomNavItem(
-        route = Screen.History.route,
+val bottomNavigationItems = listOf(
+    BottomNavItem(
+        title = "History",
         icon = Icons.Default.History,
-        label = "History"
+        route = HistoryScreen
+    ),
+    BottomNavItem(
+        title = "Scan",
+        icon = Icons.Default.QrCodeScanner,
+        route = ScanScreen
+    ),
+    BottomNavItem(
+        title = "Settings",
+        icon = Icons.Default.Settings,
+        route = ProfileScreen
     )
-
-    object Profile : BottomNavItem(
-        route = Screen.Profile.route,
-        icon = Icons.Default.Person,
-        label = "Profile"
-    )
-}
+)
