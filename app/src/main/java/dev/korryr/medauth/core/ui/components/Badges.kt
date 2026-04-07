@@ -16,13 +16,7 @@ import dev.korryr.medauth.core.designsystem.theme.DangerRed
 import dev.korryr.medauth.core.designsystem.theme.SuccessGreen
 import dev.korryr.medauth.core.designsystem.theme.UnknownGray
 import dev.korryr.medauth.core.designsystem.theme.WarningAmber
-
-enum class ResultStatus {
-    VERIFIED,
-    SUSPICIOUS,
-    INVALID,
-    UNKNOWN
-}
+import dev.korryr.medauth.data.repository.ResultStatus
 
 @Composable
 fun ResultStatusBadge(

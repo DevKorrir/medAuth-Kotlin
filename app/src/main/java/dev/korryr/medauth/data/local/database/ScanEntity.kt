@@ -2,7 +2,7 @@ package dev.korryr.medauth.data.local.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.korryr.medauth.core.ui.components.ResultStatus
+import dev.korryr.medauth.data.repository.ResultStatus
 
 @Entity(tableName = "scan_history")
 data class ScanEntity(

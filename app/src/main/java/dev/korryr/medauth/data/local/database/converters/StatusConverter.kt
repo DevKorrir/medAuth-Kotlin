@@ -1,7 +1,7 @@
 package dev.korryr.medauth.data.local.database.converters
 
 import androidx.room.TypeConverter
-import dev.korryr.medauth.core.ui.components.ResultStatus
+import dev.korryr.medauth.data.repository.ResultStatus
 
 class StatusConverter {
     @TypeConverter
