@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation3.NavDisplay
-import androidx.navigation3.NavEntry
+import androidx.navigation3.ui.NavDisplay
+import androidx.navigation3.runtime.NavEntry
 import dev.korryr.medauth.presentation.features.auth.login.LoginScreen
 import dev.korryr.medauth.presentation.features.auth.onboarding.OnboardingScreen
 
@@ -28,7 +28,7 @@ fun AppNavigation(
     val backStack = remember { mutableStateListOf<Any>(OnboardingScreen) }
 
     NavDisplay(
-        backstack = backStack,
+        backStack = backStack,
         onBack = { backStack.removeLastOrNull() != null },
         modifier = modifier
     ) { key ->
@@ -73,7 +73,7 @@ fun MainScreenContainer() {
         }
     ) { innerPadding ->
         NavDisplay(
-            backstack = bottomBackStack,
+            backStack = bottomBackStack,
             onBack = { bottomBackStack.removeLastOrNull() != null },
             modifier = Modifier.padding(innerPadding)
         ) { key ->
