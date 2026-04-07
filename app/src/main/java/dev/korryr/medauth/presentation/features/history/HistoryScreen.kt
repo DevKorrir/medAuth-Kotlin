@@ -42,8 +42,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.korryr.medauth.core.ui.components.EmptyStateView
 import dev.korryr.medauth.core.ui.components.ResultStatusBadge
 import dev.korryr.medauth.data.local.database.ScanEntity
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,8 +104,9 @@ fun HistoryItemCard(
     scan: ScanEntity,
     onClick: () -> Unit
 ) {
-    val dateFormat = SimpleDateFormat("MMM dd, yyyy • hh:mm a", Locale.getDefault())
-    val dateString = dateFormat.format(Date(scan.timestamp))
+    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy • hh:mm a", Locale.getDefault())
+        .withZone(ZoneId.systemDefault())
+    val dateString = formatter.format(Instant.ofEpochMilli(scan.timestamp))
 
     Card(
         modifier = Modifier

@@ -89,6 +89,11 @@ fun CameraPreview(
 
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        onDispose {
+            cameraExecutor.shutdown()
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(

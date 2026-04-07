@@ -28,7 +28,7 @@ class SyncWorker @AssistedInject constructor(
                 
                 val syncedIds = unsyncedScans.map { it.id }
                 scanDao.markAsSynced(syncedIds)
-                Log.d("SyncWorker", "Successfully synced \${unsyncedScans.size} items.")
+                Log.d("SyncWorker", "Successfully synced ${unsyncedScans.size} items.")
             }
             
             Result.success()

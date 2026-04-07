@@ -22,7 +22,7 @@ object DatabaseModule {
             context,
             MedAuthDatabase::class.java,
             "medauth_db"
-        ).fallbackToDestructiveMigration().build()
+        ).build()
     }
 
     @Provides
