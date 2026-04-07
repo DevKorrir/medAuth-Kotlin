@@ -1,185 +1,164 @@
 package dev.korryr.medauth.presentation.features.history
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import dev.korryr.medauth.presentation.features.history.components.EmptyHistoryState
-import dev.korryr.medauth.presentation.features.history.components.HistoryHeader
-import dev.korryr.medauth.presentation.features.history.components.SwipeToDeleteHistoryItem
-import dev.korryr.medauth.presentation.features.history.data.MedicineHistory
-import dev.korryr.medauth.presentation.features.history.data.VerificationStatus
+import androidx.hilt.navigation.compose.hiltViewModel
+import dev.korryr.medauth.core.ui.components.EmptyStateView
+import dev.korryr.medauth.core.ui.components.ResultStatusBadge
+import dev.korryr.medauth.data.local.database.ScanEntity
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
-    modifier: Modifier = Modifier,
-    onReportDrug: (MedicineHistory) -> Unit = {},
-    onDeleteHistory: (MedicineHistory) -> Unit = {},
-    onItemClick: (MedicineHistory) -> Unit = {}
+    onScanClick: (Int) -> Unit,
+    viewModel: HistoryViewModel = hiltViewModel()
 ) {
-    // Sample data - replace with your actual data source
-    var historyList by remember {
-        mutableStateOf(
-            listOf(
-                MedicineHistory(
-                    id = "1",
-                    medicineName = "Paracetamol 500mg",
-                    batchNumber = "PAR2024001",
-                    scanDate = "Today",
-                    scanTime = "2:30 PM",
-                    verificationStatus = VerificationStatus.VERIFIED,
-                    manufacturer = "Cosmos Pharmaceuticals",
-                    expiryDate = "Dec 2025"
-                ),
-                MedicineHistory(
-                    id = "2",
-                    medicineName = "Amoxicillin 250mg",
-                    batchNumber = "AMX2024002",
-                    scanDate = "Yesterday",
-                    scanTime = "10:15 AM",
-                    verificationStatus = VerificationStatus.SUSPICIOUS,
-                    manufacturer = "Beta Healthcare",
-                    expiryDate = "Mar 2025"
-                ),
-                MedicineHistory(
-                    id = "3",
-                    medicineName = "Ibuprofen 400mg",
-                    batchNumber = "IBU2024003",
-                    scanDate = "2 days ago",
-                    scanTime = "4:45 PM",
-                    verificationStatus = VerificationStatus.FAKE,
-                    manufacturer = "Unknown Manufacturer",
-                    expiryDate = "Expired"
-                ),
-                MedicineHistory(
-                    id = "4",
-                    medicineName = "Aspirin 75mg",
-                    batchNumber = "ASP2024004",
-                    scanDate = "3 days ago",
-                    scanTime = "11:20 AM",
-                    verificationStatus = VerificationStatus.VERIFIED,
-                    manufacturer = "PharmaCorp Ltd",
-                    expiryDate = "Sep 2026"
-                ),
-                MedicineHistory(
-                    id = "5",
-                    medicineName = "Metformin 500mg",
-                    batchNumber = "MET2024005",
-                    scanDate = "1 week ago",
-                    scanTime = "1:10 PM",
-                    verificationStatus = VerificationStatus.PENDING,
-                    manufacturer = "Global Pharma",
-                    expiryDate = "Nov 2025"
+    val scans by viewModel.scanHistory.collectAsState()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Scan History", fontWeight = FontWeight.Bold) },
+                actions = {
+                    if (scans.isNotEmpty()) {
+                        IconButton(onClick = { viewModel.clearHistory() }) {
+                            Icon(Icons.Default.Delete, contentDescription = "Clear History")
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             )
-        )
-    }
-
-    var showClearAllDialog by remember { mutableStateOf(false) }
-    val listState = rememberLazyListState()
-
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
-            // Header with stats and actions
-            HistoryHeader(
-                totalScans = historyList.size,
-                verifiedCount = historyList.count { it.verificationStatus == VerificationStatus.VERIFIED },
-                suspiciousCount = historyList.count { it.verificationStatus == VerificationStatus.SUSPICIOUS },
-                fakeCount = historyList.count { it.verificationStatus == VerificationStatus.FAKE },
-                onClearAll = {
-                    if (historyList.isNotEmpty()) showClearAllDialog = true
-                }
-            )
-
-            if (historyList.isEmpty()) {
-                // Empty state
-                EmptyHistoryState(
-                    modifier = Modifier.fillMaxSize()
+            if (scans.isEmpty()) {
+                EmptyStateView(
+                    title = "No Scans Yet",
+                    message = "Your verification history will appear here offline safely."
                 )
             } else {
-                // History list
                 LazyColumn(
-                    state = listState,
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(
-                       items = historyList,
-                        key = { it.id }
-                    ) { historyItem ->
-                        SwipeToDeleteHistoryItem(
-                            historyItem = historyItem,
-                            onDelete = {
-                                historyList = historyList.filter { it.id != historyItem.id }
-                                onDeleteHistory(historyItem)
-                            },
-                            onReport = { onReportDrug(historyItem) },
-                            onClick = { onItemClick(historyItem) },
-                           // modifier = Modifier.animateItemPlacement()
+                    items(scans, key = { it.id }) { scan ->
+                        HistoryItemCard(
+                            scan = scan,
+                            onClick = { onScanClick(scan.id) }
                         )
                     }
-
                 }
             }
         }
+    }
+}
 
-        // Clear all confirmation dialog
-        if (showClearAllDialog) {
-            AlertDialog(
-                onDismissRequest = { showClearAllDialog = false },
-                title = {
-                    Text(
-                        text = "Clear All History?",
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                text = {
-                    Text(
-                        text = "This will permanently delete all your scan history. This action cannot be undone.",
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                    )
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            historyList = emptyList()
-                            showClearAllDialog = false
-                        }
-                    ) {
-                        Text(
-                            text = "Clear All",
-                            color = MaterialTheme.colorScheme.error,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = { showClearAllDialog = false }
-                    ) {
-                        Text("Cancel")
-                    }
-                },
-                shape = RoundedCornerShape(16.dp)
-            )
+@Composable
+fun HistoryItemCard(
+    scan: ScanEntity,
+    onClick: () -> Unit
+) {
+    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy • hh:mm a", Locale.getDefault())
+        .withZone(ZoneId.systemDefault())
+    val dateString = formatter.format(Instant.ofEpochMilli(scan.timestamp))
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.QrCode,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = scan.drugName ?: "Unknown Medication",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = dateString,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+
+            ResultStatusBadge(status = scan.verificationStatus)
         }
     }
 }
