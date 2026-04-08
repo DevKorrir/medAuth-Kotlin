@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Help
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Warning
@@ -47,9 +46,9 @@ import dev.korryr.medauth.core.ui.components.ErrorStateView
 import dev.korryr.medauth.core.ui.components.InfoCard
 import dev.korryr.medauth.core.ui.components.LoadingShimmer
 import dev.korryr.medauth.core.ui.components.PrimaryButton
-import dev.korryr.medauth.data.repository.ResultStatus
 import dev.korryr.medauth.core.ui.components.ResultStatusBadge
 import dev.korryr.medauth.core.ui.components.SecondaryButton
+import dev.korryr.medauth.data.repository.ResultStatus
 import dev.korryr.medauth.data.repository.VerificationResult
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -33,11 +33,9 @@ import dev.korryr.medauth.presentation.features.auth.proflile.components.Appeara
 import dev.korryr.medauth.presentation.features.auth.proflile.components.ProfileHeader
 import dev.korryr.medauth.presentation.features.auth.proflile.components.SettingItem
 import dev.korryr.medauth.presentation.features.auth.proflile.components.SettingSectionCard
-import dev.korryr.medauth.presentation.features.auth.proflile.components.SettingsSection
 import dev.korryr.medauth.presentation.features.auth.proflile.components.StatsCards
 import dev.korryr.medauth.presentation.features.auth.proflile.components.SupportSection
 import dev.korryr.medauth.presentation.features.auth.proflile.data.UserProfile
-import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
